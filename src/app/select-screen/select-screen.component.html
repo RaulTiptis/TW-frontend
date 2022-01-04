@@ -1,0 +1,61 @@
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" style="color:white;">Safe Space Platform</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+    </ul>
+  </div>
+</nav>
+<div class="container" id="main-container">
+  <div class="row main-row">
+    <div class="col-12 d-flex justify-content-center">
+      <a role="button" class="btn btn-lg btn-primary m-5" data-toggle="modal" href="#" (click)="this.isStudent = false;" data-target="#userModal">I am a Teacher</a>
+
+      <a role="button" class="btn btn-lg btn-primary m-5" data-toggle="modal" href="#" (click)="this.isStudent = true;" data-target="#userModal">I am a Student</a>
+    </div>
+
+
+  </div>
+
+  <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalLabel">Create User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #userForm="ngForm" (ngSubmit)="onAddUser(userForm)">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" ngModel name="firstName" class="form-control" id="firstName" placeholder="First Name" required>
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" ngModel name="lastName" class="form-control" id="lastName" placeholder="Last Name" required>
+            </div>
+            <div class="form-group">
+              <label for="department">Department</label>
+              <input type="text" ngModel name="department" class="form-control" id="department" placeholder="Department" required>
+            </div>
+            <div class="form-group">
+              <label for="year">Year (only for students)</label>
+              <input type="text" ngModel name="year" class="form-control" id="year" placeholder="Year (only for students)">
+            </div>
+            <input type="hidden" ngModel name="isStudent" class="form-control hidden" id="isStudent" value="{{this.isStudent}}">
+            <div class="modal-footer">
+              <button type="button" id="closeUserForm" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button [disabled]="userForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

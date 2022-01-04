@@ -1,0 +1,248 @@
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" style="color:white;" routerLink="/" href="#">Safe Space Platform</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" (click)="onOpenModalClassroom(null, 'add')">Add Classroom <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" (click)="onOpenModalSubject(null, 'add')">Add Subject <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" (click)="onModalCalendar()">Calendar <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input type="search" (ngModelChange)="searchSubject(key.value)" #key="ngModel" ngModel name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search by subject..." required>
+    </form>
+  </div>
+</nav>
+<div class="container" id="main-container">
+  <div class="row mt-5">
+    <div class="col-12">
+      <h1>Teacher Interface</h1>
+    </div>
+  </div>
+  <div class="row my-5">
+    <div *ngFor="let classroom of classrooms" class="col-md-6 col-xl-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title align-self-center w-100">
+            <h5>{{classroom?.subject.name}}</h5>
+            <p class="m-0">{{classroom?.teacher.firstName}} {{classroom?.teacher.lastName}}</p>
+            <p class="m-0">{{classroom?.name}}</p>
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Location : {{classroom?.location}}</li>
+          <li class="list-group-item">Capacity : {{classroom?.capacity}}</li>
+          <li class="list-group-item">{{classroom?.month}} {{classroom?.day}} {{classroom?.hour}}</li>
+        </ul>
+        <div class="card-body">
+          <div class="float-right btn-group btn-group-sm">
+            <a (click)="onOpenModalClassroom(classroom, 'update')" class="btn btn-primary tooltips" data-placement="top" data-original-title="Update"><i class="fa fa-pencil"></i> </a>
+            <a (click)="onOpenModalClassroom(classroom, 'delete')" class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="addClassroomModal" tabindex="-1" role="dialog" aria-labelledby="addClassroomModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addClassroomModalLabel">Add Classroom</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form #addForm="ngForm" (ngSubmit)="onAddClassroom(addForm)">
+              <div class="form-group">
+                <label for="subject">Subject</label>
+                <select name="subject" ngModel id="subject" class="form-control">
+                  <option *ngFor="let subject of subjects" value="{{subject.id}}">{{subject.name}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="teacher">Teacher</label>
+                <select name="teacher" ngModel id="teacher" class="form-control">
+                  <ng-container *ngFor="let user of users">
+                  <option  *ngIf="!user.isStudent" value="{{user.id}}">{{user.firstName}} {{user.lastName}}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="month">Month</label>
+                <select name="month" ngModel id="month" class="form-control">
+                  <ng-container *ngFor="let month of months">
+                    <option>{{month}}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="day">Day</label>
+                <input type="text" ngModel name="day" class="form-control" id="day" placeholder="Day" required>
+              </div>
+              <div class="form-group">
+                <label for="hour">Time Interval</label>
+                <select name="hour" ngModel id="hour" class="form-control">
+                  <ng-container *ngFor="let hour of hours">
+                    <option>{{hour}}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="name">Class name</label>
+                <input type="text" ngModel name="name" class="form-control" id="name" placeholder="Class Name" required>
+              </div>
+              <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" ngModel name="location" class="form-control" id="location" placeholder="Location" required>
+              </div>
+              <div class="form-group">
+                <label for="capacity">Capacity</label>
+                <input type="text" ngModel name="capacity" class="form-control" id="capacity" placeholder="Capacity" required>
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="add-classroom-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="updateClassroomModal" tabindex="-1" role="dialog" aria-labelledby="classroomEditModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="updateClassroomModalLabel">Edit {{updateClassroom?.name}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form #updateForm="ngForm" (ngSubmit)="onUpdateClassroom(updateForm)">
+              <div class="form-group">
+                <label for="subject">Subject</label>
+                <select name="subject" ngModel class="form-control">
+                  <option *ngFor="let subject of subjects" value="{{subject.id}}">{{subject.name}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="teacher">Teacher</label>
+                <select name="teacher" ngModel id="teacherUpdate" class="form-control">
+                  <ng-container *ngFor="let user of users">
+                    <option  *ngIf="!user.isStudent" value="{{user.id}}">{{user.firstName}} {{user.lastName}}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="month">Month</label>
+                <select name="month" ngModel id="monthUpdate" class="form-control">
+                  <ng-container *ngFor="let month of months">
+                    <option>{{month}}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="day">Day</label>
+                <input type="text" ngModel name="day" class="form-control" id="dayUpdate" placeholder="Day" required>
+              </div>
+              <div class="form-group">
+                <label for="hour">Time Interval</label>
+                <select name="hour" ngModel id="hourUpdate" class="form-control">
+                  <ng-container *ngFor="let hour of hours">
+                    <option>{{hour}}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="name">Class name</label>
+                <input type="text" ngModel="{{updateClassroom?.name}}" name="name" class="form-control" id="nameUpdate" placeholder="Class Name" required>
+              </div>
+              <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" ngModel="{{updateClassroom?.location}}" name="location" class="form-control" id="locationUpdate" placeholder="Location" required>
+              </div>
+              <div class="form-group">
+                <label for="capacity">Capacity</label>
+                <input type="text" ngModel="{{updateClassroom?.capacity}}" name="capacity" class="form-control" id="capacityUpdate" placeholder="Capacity" required>
+              </div>
+              <input type="hidden" ngModel="{{updateClassroom?.id}}" name="id" class="form-control hidden" id="idUpdate" value="{{updateClassroom?.id}}">
+              <div class="modal-footer">
+                <button type="button" id="update-classroom-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button [disabled]="updateForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="deleteClassroomModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Delete Classroom</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete {{deleteClassroom?.name}}?</p>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+              <button (click)="onDeleteClassroom(deleteClassroom?.id)" class="btn btn-danger" data-dismiss="modal">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="modal fade" id="addSubjectModal" tabindex="-1" role="dialog" aria-labelledby="addSubjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addSubjectModalLabel">Add Subject</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #addSubjectForm="ngForm" (ngSubmit)="onAddSubject(addSubjectForm)">
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" ngModel name="name" class="form-control" id="subjectName" placeholder="Subject" required>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="add-subject-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button [disabled]="addSubjectForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="modal fade" id="CalendarModal" tabindex="-1" role="dialog" aria-labelledby="CalendarModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="CalendarModalLabel">Calendar</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+</div>
