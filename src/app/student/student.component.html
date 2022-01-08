@@ -1,0 +1,88 @@
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="../../../node_modules/angular-calendar/css/angular-calendar.css" rel="stylesheet">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand"  routerLink="/" href="#" style="color:white;">Safe Space Platform</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+    </ul>
+  </div>
+</nav>
+<div class="container" id="main-container">
+  <div class="row mt-5">
+    <div class="col-12">
+      <h1>Calendar</h1>
+    </div>
+
+    <div class="btn-group">
+      <div id="prevButton"
+        class="btn btn-primary"
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+        Previous
+      </div>
+      <div
+        class="btn btn-outline-secondary"
+        mwlCalendarToday
+        [(viewDate)]="viewDate"
+      >
+        Today
+      </div>
+      <div id="nextButton"
+        class="btn btn-primary"
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+        Next
+      </div>
+    </div>
+
+    <div class="modal fade" id="addClassroomModal" tabindex="-1" role="dialog" aria-labelledby="addClassroomModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addClassroomModalLabel">Add Classroom</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form #eventForm="ngForm" (ngSubmit)="onAddEvent(eventForm)">
+              <div class="form-group">
+                <label for="day">Day of Week</label>
+                <select name="day" ngModel id="day" class="form-control">
+                  <ng-container *ngFor="let day of days">
+                    <option>{{day}}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="hour">Time Interval</label>
+                <select name="hour" ngModel id="hour" class="form-control">
+                  <ng-container *ngFor="let hour of hours">
+                    <option>{{hour}}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="add-event-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button [disabled]="eventForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="row my-5">
+    <mwl-calendar-week-view class="w-100" [viewDate]="viewDate" [events]="events" [dayStartHour]="8" [dayEndHour]="22" [excludeDays]="[6, 0]"></mwl-calendar-week-view>
+  </div>
+</div>
