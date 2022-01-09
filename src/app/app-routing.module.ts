@@ -5,6 +5,7 @@ import {StudentComponent} from "./student/student.component";
 import {SelectScreenComponent} from "./select-screen/select-screen.component";
 import {StudentinterComponent} from './studentinter/studentinter.component';
 import {StudentregisteredComponent} from "./studentregistered/studentregistered.component";
+import {HomePageComponent} from "./home-page/home-page.component";
 
 const routes: Routes = [
   {path: 'teacher', component: TeacherComponent},
@@ -12,6 +13,7 @@ const routes: Routes = [
   {path: 'select-screen', component: SelectScreenComponent},
   {path: 'studentinter', component: StudentinterComponent},
   {path: 'studentregistered', component: StudentregisteredComponent},
+  {path: 'home-page', component: HomePageComponent},
   {path: '', redirectTo: '/select-screen', pathMatch: 'full'}
 ];
 
