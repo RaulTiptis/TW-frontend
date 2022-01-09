@@ -15,6 +15,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { StudentinterComponent } from './studentinter/studentinter.component';
 import { StudentregisteredComponent } from './studentregistered/studentregistered.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { StudentregisteredComponent } from './studentregistered/studentregistere
     StudentComponent,
     SelectScreenComponent,
     StudentinterComponent,
-    StudentregisteredComponent
+    StudentregisteredComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
