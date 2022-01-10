@@ -6,6 +6,7 @@ import {SelectScreenComponent} from "./select-screen/select-screen.component";
 import {StudentinterComponent} from './studentinter/studentinter.component';
 import {StudentregisteredComponent} from "./studentregistered/studentregistered.component";
 import {HomePageComponent} from "./home-page/home-page.component";
+import {CheckEmailComponent} from "./check-email/check-email.component";
 
 const routes: Routes = [
   {path: 'teacher', component: TeacherComponent},
@@ -14,7 +15,8 @@ const routes: Routes = [
   {path: 'studentinter', component: StudentinterComponent},
   {path: 'studentregistered', component: StudentregisteredComponent},
   {path: 'home-page', component: HomePageComponent},
-  {path: '', redirectTo: '/select-screen', pathMatch: 'full'}
+  {path: 'check-email', component: CheckEmailComponent},
+  {path: '', redirectTo: '/home-page', pathMatch: 'full'}
 ];
 
 @NgModule({

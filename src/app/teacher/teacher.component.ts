@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {User} from '../user';
 import {UserService} from '../user.service';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -8,6 +8,8 @@ import {SubjectService} from '../subject.service';
 import {Subject} from '../subject';
 import {NgForm} from '@angular/forms';
 import {Router} from '@angular/router';
+import {CourseRegistrationService} from "../course-registration-service";
+import {CourseRegistration} from "../course-registration";
 
 @Component({
   selector: 'teacher',
@@ -16,6 +18,7 @@ import {Router} from '@angular/router';
 })
 export class TeacherComponent implements OnInit{
   title = 'checkin';
+  public savedClass: Classroom[];
   public users: User[];
   public classrooms: Classroom[];
   public subjects: Subject[];
@@ -24,7 +27,7 @@ export class TeacherComponent implements OnInit{
   public months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   public hours = ['8:00 - 9:30', '9:40 - 11:10', '11:20 - 12:50', '13:00 - 14:30', '14:40 - 16:10', '16:20 - 17:50', '18:00 - 19:30', '19:40 - 21:10' ];
 
-  constructor(private userService: UserService, private classroomService: ClassroomService, private subjectService: SubjectService, private router: Router){}
+  constructor(private userService: UserService, private classroomService: ClassroomService, private subjectService: SubjectService, private courseRegistrationService: CourseRegistrationService, private router: Router){}
 
   ngOnInit(): void{
     this.getClassrooms();
@@ -48,6 +51,7 @@ export class TeacherComponent implements OnInit{
     this.classroomService.getClassrooms().subscribe(
       (classroomResponse: Classroom[]) => {
         this.classrooms = classroomResponse;
+        this.savedClass = classroomResponse;
         console.log(classroomResponse);
       },
       (error: HttpErrorResponse) => {
@@ -97,10 +101,31 @@ export class TeacherComponent implements OnInit{
         console.log(response);
         this.getClassrooms();
         addForm.reset();
+        console.log("firstadd");
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
         console.log(error);
+      }
+    );
+    this.classroomService.getClassrooms().subscribe(
+      (classroomResponse: Classroom[]) => {
+        this.classrooms = classroomResponse;
+        this.savedClass = classroomResponse;
+        console.log(classroomResponse);
+        console.log("gettheclassrooms");
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+    this.courseRegistrationService.addCourseRegistration(this.classrooms[this.classrooms.length - 1].id).subscribe(
+      (response: CourseRegistration) => {
+        console.log(response);
+        console.log("addToCoursePair");
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
       }
     );
   }

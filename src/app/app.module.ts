@@ -16,6 +16,9 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { StudentinterComponent } from './studentinter/studentinter.component';
 import { StudentregisteredComponent } from './studentregistered/studentregistered.component';
 import { HomePageComponent } from './home-page/home-page.component';
+import {CourseRegistrationService} from "./course-registration-service";
+import {RegistrationService} from "./email.service";
+import { CheckEmailComponent } from './check-email/check-email.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,8 @@ import { HomePageComponent } from './home-page/home-page.component';
     SelectScreenComponent,
     StudentinterComponent,
     StudentregisteredComponent,
-    HomePageComponent
+    HomePageComponent,
+    CheckEmailComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +38,7 @@ import { HomePageComponent } from './home-page/home-page.component';
     FormsModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
-  providers: [UserService, ClassroomService, SubjectService],
+  providers: [UserService, ClassroomService, SubjectService, CourseRegistrationService, RegistrationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

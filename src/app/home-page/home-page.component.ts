@@ -6,6 +6,8 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {UserService} from '../user.service';
 import {Subject} from '../subject';
 import {Router} from '@angular/router';
+import {RegistrationService} from "../email.service";
+import {Registration} from "../email";
 
 @Component({
   selector: 'app-home-page',
@@ -20,7 +22,7 @@ export class HomePageComponent implements OnInit {
   public isStudent: boolean;
 
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, private registrationservice: RegistrationService, private router: Router) {
     this.isStudent = false;
   }
 
@@ -30,17 +32,10 @@ export class HomePageComponent implements OnInit {
 
   public addAccount(userForm: NgForm): void{
     document.getElementById('closeUserForm').click();
-    userForm.value.isStudent = this.isStudent;
-    console.log(userForm.value);
-    this.userService.addUser(userForm.value).subscribe(
-      (response: User) => {
+    this.registrationservice.register(userForm.value).subscribe(
+      (response: Registration) => {
         console.log(response);
         userForm.reset();
-        if (this.isStudent) {
-          this.router.navigate(['/studentinter']);
-        }
-        else { this.router.navigate(['/teacher']); }
-
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
